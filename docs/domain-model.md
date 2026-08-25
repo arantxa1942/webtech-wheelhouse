@@ -51,5 +51,5 @@ Table photos {
 }
 
 ```
-![Modelo de Dominio](webtech-wheelhouse/photo/photo.png)
+![Modelo de Dominio](photo/photo.png)
 
