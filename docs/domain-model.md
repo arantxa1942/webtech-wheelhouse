@@ -51,3 +51,4 @@ Table photos {
 }
 
 ```
+![Modelo de Dominio](../photo/photo%20.jpg)
