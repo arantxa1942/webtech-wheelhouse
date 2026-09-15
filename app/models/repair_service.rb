@@ -1,0 +1,3 @@
+class RepairService < ApplicationRecord
+end
+
