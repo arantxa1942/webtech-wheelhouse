@@ -13,12 +13,12 @@ Table bikes {
   S_number varchar [unique]
 }
 
-Table mechanic {
+Table mechanics {
   id integre [pk]
   name varchar
 }
 
-Table job_type {
+Table job_types {
   id integre [pk]
   name varchar
   current_price decimal
@@ -36,7 +36,7 @@ Table repairs{
   created_at datetime
 }
 
-Table repair_job {
+Table repair_jobs{
   id integer [pk]
   repair_id integer [ref: >repair.id]
   job_type_id integer [ref: >job_type.id]
