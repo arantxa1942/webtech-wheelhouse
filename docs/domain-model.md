@@ -33,7 +33,6 @@ Table repairs{
   bike_id integre [ref: >bikes.id]
   mechanic_id integer [ref: >mechanics.id]
   status varchar
-  diagnosis text
   promised_on date
   approved_at datetime
   completed_at datetime
@@ -48,15 +47,6 @@ Table repair_jobs{
   price decimal
   update_at
 }
-
-Table photos {
-  id integer [pk]
-  repair_id [ref: >repairs.id]
-  url varchar
-  taken datetime
-  update_at
-}
-
 ```
 ![Modelo de Dominio](../photo/photo.png)
 
