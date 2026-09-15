@@ -23,3 +23,22 @@ good service when repairing a bike.
   - [`docs/decisions.md`](docs/decisions.md)
   - [`docs/wireframes.md`](docs/wireframes.md)
   
+## Prerequisites
+Ruby 3.4.9 (see .ruby-version)
+Rails 8.1.3
+Node 22.x and Yarn (see .node-version)
+PostgreSQL, running locally, with a role that can create databases  
+## Setup
+
+Run these commands in order from the project root:
+
+bash
+bundle install
+yarn install
+bin/rails db:create
+bin/rails db:prepare
+## Running the app
+bash
+bin/dev
+
+This starts the Rails server and the Sass watcher together (see Procfile.dev). Open the app at http://localhost:3000.
