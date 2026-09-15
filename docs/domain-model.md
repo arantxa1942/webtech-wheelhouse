@@ -3,44 +3,50 @@ Table customers {
   id integer [pk]
   name varchar
   phone varchar
+  update_at
 }
 
 Table bikes {
   id integer[pk]
-  customer_id integer [ref: > customer.id]
+  customer_id integer [ref: > customers.id]
   make varchar
   model varchar
-  S_number varchar [unique]
+  serial_number varchar [unique]
+  update_at
 }
 
 Table mechanics {
   id integre [pk]
   name varchar
+  update_at
 }
 
 Table job_types {
   id integre [pk]
   name varchar
   current_price decimal
+  update_at
 }
 
 Table repairs{
   id integer [pk]
   bike_id integre [ref: >bikes.id]
-  mechanic_id integer [ref: >mechanic.id]
+  mechanic_id integer [ref: >mechanics.id]
   status varchar
   diagnosis text
-  promised_date date
-  approved datetime
+  promised_on date
+  approved_at datetime
   completed_at datetime
   created_at datetime
+  update_at
 }
 
 Table repair_jobs{
   id integer [pk]
-  repair_id integer [ref: >repair.id]
-  job_type_id integer [ref: >job_type.id]
+  repair_id integer [ref: >repairs.id]
+  job_type_id integer [ref: >job_types.id]
   price decimal
+  update_at
 }
 
 Table photos {
@@ -48,6 +54,7 @@ Table photos {
   repair_id [ref: >repairs.id]
   url varchar
   taken datetime
+  update_at
 }
 
 ```
