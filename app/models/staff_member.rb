@@ -1,3 +1,2 @@
 class StaffMember < ApplicationRecord
 end
-

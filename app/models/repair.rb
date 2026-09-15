@@ -1,4 +1,2 @@
 class Repair < ApplicationRecord
 end
-
-
