@@ -1,0 +1,5 @@
+<tr>
+  <td><%= link_to customer.name, customer_path(customer) %></td>
+  <td><%= customer.phone %></td>
+  <td><span class="badge rounded-pill bg-secondary"><%= pluralize(customer.bikes.count, "bike") %></span></td>
+</tr>

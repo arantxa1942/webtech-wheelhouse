@@ -1,0 +1,19 @@
+<% content_for :title, "Services" %>
+
+<h1>Services</h1>
+
+<% if @services.any? %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "service", collection: @services %>
+    </tbody>
+  </table>
+<% else %>
+  <p>There are no services yet.</p>
+<% end %>

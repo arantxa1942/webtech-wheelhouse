@@ -1,0 +1,31 @@
+<% content_for :title, @customer.name %>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h1 class="card-title"><%= @customer.name %></h1>
+    <p class="card-text text-muted"><%= @customer.phone %></p>
+  </div>
+</div>
+
+<h2>Bikes</h2>
+
+<% if @customer.bikes.any? %>
+  <table class="table table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Color</th>
+        <th>Serial number</th>
+        <th>Owner</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "bikes/bike", collection: @customer.bikes %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="text-muted fst-italic">This customer has no bikes on file.</p>
+<% end %>
+
+<%= link_to "← Back to customers", customers_path, class: "btn btn-outline-secondary mt-2" %>

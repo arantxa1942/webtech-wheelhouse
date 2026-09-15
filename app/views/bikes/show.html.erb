@@ -1,0 +1,31 @@
+<% content_for :title, "#{@bike.make} #{@bike.model}" %>
+
+<h1><%= @bike.make %> <%= @bike.model %></h1>
+
+<dl class="row">
+  <dt class="col-sm-3">Color</dt>
+  <dd class="col-sm-9"><%= @bike.color %></dd>
+
+  <dt class="col-sm-3">Serial number</dt>
+  <dd class="col-sm-9"><%= @bike.serial_number %></dd>
+
+  <dt class="col-sm-3">Owner</dt>
+  <dd class="col-sm-9"><%= link_to @bike.customer.name, customer_path(@bike.customer) %></dd>
+</dl>
+
+<h2>Repairs</h2>
+
+<% if @bike.repairs.any? %>
+  <ul class="list-group mb-3">
+    <% @bike.repairs.each do |repair| %>
+      <li class="list-group-item">
+        <%= link_to repair.status.titleize, repair_path(repair) %>
+        — promised on <%= repair.promised_on ? l(repair.promised_on, format: :long) : "not scheduled" %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>This bike has never been in for a repair.</p>
+<% end %>
+
+<%= link_to "Back to bikes", bikes_path %>

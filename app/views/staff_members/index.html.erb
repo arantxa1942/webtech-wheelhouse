@@ -1,0 +1,19 @@
+<% content_for :title, "Staff" %>
+
+<h1>Staff</h1>
+
+<% if @staff_members.any? %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "staff_member", collection: @staff_members %>
+    </tbody>
+  </table>
+<% else %>
+  <p>There are no staff members yet.</p>
+<% end %>

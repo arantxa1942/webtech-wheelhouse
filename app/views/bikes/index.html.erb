@@ -1,0 +1,25 @@
+<% content_for :title, "Bikes" %>
+
+<h1>Bikes</h1>
+<p>
+  Browse the bicycles registered.
+</p>
+
+<% if @bikes.any? %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Color</th>
+        <th>Serial number</th>
+        <th>Owner</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "bike", collection: @bikes %>
+    </tbody>
+  </table>
+<% else %>
+  <p>There are no bikes yet.</p>
+<% end %>
