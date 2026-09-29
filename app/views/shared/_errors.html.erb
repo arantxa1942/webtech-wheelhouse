@@ -1,0 +1,10 @@
+<% if record.errors.any? %>
+  <div class="alert alert-danger" role="alert">
+    <p class="mb-1 fw-bold">Please fix the following:</p>
+    <ul class="mb-0">
+      <% record.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

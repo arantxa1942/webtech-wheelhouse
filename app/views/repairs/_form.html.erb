@@ -1,0 +1,101 @@
+<%
+  bike_options    = Bike.order(:make, :model).map { |b| ["#{b.make} #{b.model} (#{b.serial_number})", b.id] }
+  staff_options   = StaffMember.order(:name).pluck(:name, :id)
+  service_options = Service.order(:name).pluck(:name, :id)
+%>
+
+<%= form_with model: repair do |f| %>
+  <%= render "shared/errors", record: repair %>
+
+  <div class="mb-3">
+    <%= f.label :bike_id, "Bike", class: "form-label" %>
+    <%= f.select :bike_id, bike_options, { prompt: "Choose a bike" },
+          class: field_class(repair, :bike_id, :bike, base: "form-select") %>
+    <%= field_error(repair, :bike_id, :bike) %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :staff_member_id, "Mechanic", class: "form-label" %>
+    <%= f.select :staff_member_id, staff_options, { include_blank: true },
+          class: field_class(repair, :staff_member_id, :staff_member, base: "form-select") %>
+    <%= field_error(repair, :staff_member_id, :staff_member) %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :status, class: "form-label" %>
+    <%= f.select :status, Repair.statuses.keys.map { |s| [s.titleize, s] }, {},
+          class: field_class(repair, :status, base: "form-select") %>
+    <%= field_error(repair, :status) %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :received_at, class: "form-label" %>
+    <%= f.datetime_field :received_at, class: field_class(repair, :received_at) %>
+    <%= field_error(repair, :received_at) %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :quoted_at, class: "form-label" %>
+    <%= f.datetime_field :quoted_at, class: field_class(repair, :quoted_at) %>
+    <%= field_error(repair, :quoted_at) %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :promised_on, class: "form-label" %>
+    <%= f.date_field :promised_on, class: field_class(repair, :promised_on) %>
+    <%= field_error(repair, :promised_on) %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :returned_at, class: "form-label" %>
+    <%= f.datetime_field :returned_at, class: field_class(repair, :returned_at) %>
+    <%= field_error(repair, :returned_at) %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :customer_response, class: "form-label" %>
+    <%= f.text_field :customer_response, class: field_class(repair, :customer_response) %>
+    <%= field_error(repair, :customer_response) %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :customer_responded_at, class: "form-label" %>
+    <%= f.datetime_field :customer_responded_at, class: field_class(repair, :customer_responded_at) %>
+    <%= field_error(repair, :customer_responded_at) %>
+  </div>
+
+  <h2 class="h5 mt-4">Services</h2>
+  <p class="text-muted">Leave the service blank on a line to ignore it.</p>
+
+  <%= f.fields_for :repair_services do |line| %>
+    <div class="row g-2 mb-2 align-items-start">
+      <div class="col-md-6">
+        <%= line.label :service_id, "Service", class: "form-label" %>
+        <%= line.select :service_id, service_options, { include_blank: true },
+              class: field_class(line.object, :service_id, :service, base: "form-select") %>
+        <%= field_error(line.object, :service_id, :service) %>
+      </div>
+
+      <div class="col-md-4">
+        <%= line.label :charged_price, "Price charged", class: "form-label" %>
+        <%= line.number_field :charged_price, step: "0.01", min: 0,
+              class: field_class(line.object, :charged_price) %>
+        <%= field_error(line.object, :charged_price) %>
+      </div>
+
+      <% if line.object.persisted? %>
+        <div class="col-md-2 pt-4">
+          <div class="form-check">
+            <%= line.check_box :_destroy, class: "form-check-input" %>
+            <%= line.label :_destroy, "Remove", class: "form-check-label" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="mt-4">
+    <%= f.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", repair.persisted? ? repair_path(repair) : repairs_path, class: "btn btn-outline-secondary" %>
+  </div>
+<% end %>

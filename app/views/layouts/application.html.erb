@@ -62,6 +62,9 @@
   </nav>
 
   <main class="container mt-4">
+    <% flash.each do |kind, message| %>
+      <div class="alert <%= kind.to_s == "notice" ? "alert-success" : "alert-danger" %>" role="alert"><%= message %></div>
+    <% end %>
     <%= yield %>
   </main>
 </body>

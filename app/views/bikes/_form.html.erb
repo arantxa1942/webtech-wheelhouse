@@ -1,0 +1,38 @@
+<%= form_with model: bike do |f| %>
+  <%= render "shared/errors", record: bike %>
+
+  <div class="mb-3">
+    <%= f.label :customer_id, "Owner", class: "form-label" %>
+    <%= f.collection_select :customer_id, Customer.order(:name), :id, :name,
+          { prompt: "Choose an owner" },
+          { class: field_class(bike, :customer_id, :customer, base: "form-select") } %>
+    <%= field_error(bike, :customer_id, :customer) %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :make, class: "form-label" %>
+    <%= f.text_field :make, class: field_class(bike, :make) %>
+    <%= field_error(bike, :make) %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :model, class: "form-label" %>
+    <%= f.text_field :model, class: field_class(bike, :model) %>
+    <%= field_error(bike, :model) %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :color, class: "form-label" %>
+    <%= f.text_field :color, class: field_class(bike, :color) %>
+    <%= field_error(bike, :color) %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :serial_number, class: "form-label" %>
+    <%= f.text_field :serial_number, class: field_class(bike, :serial_number) %>
+    <%= field_error(bike, :serial_number) %>
+  </div>
+
+  <%= f.submit class: "btn btn-primary" %>
+  <%= link_to "Cancel", bike.persisted? ? bike_path(bike) : bikes_path, class: "btn btn-outline-secondary" %>
+<% end %>
