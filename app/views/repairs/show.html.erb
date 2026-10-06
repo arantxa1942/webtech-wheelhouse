@@ -24,7 +24,7 @@
 
 <h2>Services charged</h2>
 
-<% if @repair.repair_services.any? %>
+<% if @lines.any? %>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -33,7 +33,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @repair.repair_services.each do |line| %>
+      <% @lines.each do |line| %>
         <tr>
           <td><%= link_to line.service.name, service_path(line.service) %></td>
           <td><%= number_to_currency(line.charged_price) %></td>
@@ -51,4 +51,10 @@
   <p>No services have been charged on this repair yet.</p>
 <% end %>
 
-<%= link_to "Back to repairs", repairs_path %>
+<div class="d-flex gap-2 mt-2">
+  <%= link_to "← Back to repairs", repairs_path, class: "btn btn-outline-secondary" %>
+  <%= link_to "Edit", edit_repair_path(@repair), class: "btn btn-outline-primary" %>
+  <%= button_to "Delete", @repair, method: :delete,
+        class: "btn btn-outline-danger",
+        form: { data: { turbo_confirm: "Delete repair ##{@repair.id}?" } } %>
+</div>

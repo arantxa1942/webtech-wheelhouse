@@ -1,10 +1,12 @@
 class ServicesController < ApplicationController
+  before_action :set_service, only: %i[show edit update destroy]
+
   def index
     @services = Service.order(:name)
   end
 
   def show
-    @service = Service.find(params[:id])
+    @lines = @service.repair_services.includes(:repair)
   end
   def new
     @service = Service.new

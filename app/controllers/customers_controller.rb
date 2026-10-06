@@ -1,10 +1,12 @@
 class CustomersController < ApplicationController
+  before_action :set_customer, only: %i[show edit update destroy]
+
   def index
-    @customers = Customer.order(:name)
+    @customers = Customer.includes(:bikes).order(:name)
   end
 
   def show
-    @customer = Customer.find(params[:id])
+    
   end
 
   def new

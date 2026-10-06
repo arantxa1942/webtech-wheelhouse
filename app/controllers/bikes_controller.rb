@@ -1,10 +1,11 @@
 class BikesController < ApplicationController
+  before_action :set_bike, only: %i[show edit update destroy]
   def index
     @bikes = Bike.includes(:customer).order(:make, :model)
   end
 
   def show
-    @bike = Bike.find(params[:id])
+    
   end
   def new
     

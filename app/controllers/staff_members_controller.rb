@@ -1,10 +1,12 @@
 class StaffMembersController < ApplicationController
+  before_action :set_staff_member, only: %i[show edit update destroy]
+
   def index
     @staff_members = StaffMember.order(:name)
   end
 
   def show
-    @staff_member = StaffMember.find(params[:id])
+    @repairs = @staff_member.repairs.includes(bike: :customer)
   end
    def new
     @staff_member = StaffMember.new

@@ -1,13 +1,15 @@
 class RepairsController < ApplicationController
+  before_action :set_repair, only: %i[show edit update destroy]
+
   def index
     @repairs = Repair.includes(bike: :customer).order(received_at: :desc)
   end
 
   def show
-    @repair = Repair.find(params[:id])
+    @lines = @repair.repair_services.includes(:service)
   end
+
   def new
-    
     @repair = Repair.new(bike_id: params[:bike_id], received_at: Time.current)
     build_blank_lines(3)
   end
@@ -51,9 +53,9 @@ class RepairsController < ApplicationController
     @repair = Repair.find(params[:id])
   end
 
-  
   def build_blank_lines(count)
-    count.times { @repair.repair_services.build }
+    unsaved = @repair.repair_services.select(&:new_record?).size
+    (count - unsaved).times { @repair.repair_services.build }
   end
 
   def repair_params

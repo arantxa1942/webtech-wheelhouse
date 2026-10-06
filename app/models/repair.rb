@@ -1,7 +1,8 @@
 class Repair < ApplicationRecord
   belongs_to :bike
   belongs_to :staff_member, optional: true
-  has_many :repair_services, -> { newest_first }, dependent: :destroy
+  has_many :repair_services, -> { order(:id) }, dependent: :destroy
+  accepts_nested_attributes_for :repair_services, allow_destroy: true, reject_if: ->(attrs) { attrs["service_id"].blank? }
   has_many :services, through: :repair_services
 
   enum :status, {
