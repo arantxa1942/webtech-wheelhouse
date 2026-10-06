@@ -1,0 +1,16 @@
+<% if repair.intake_photos.attached? %>
+  <div class="row g-3 mb-3">
+    <% repair.intake_photos.each do |photo| %>
+      <div class="col-6 col-md-4">
+        <%= link_to url_for(photo) do %>
+          <%= image_tag photo.variant(:page), alt: repair.photo_alt, class: "img-fluid rounded mb-2" %>
+        <% end %>
+        <%= button_to "Remove", repair_intake_photo_path(repair, photo), method: :delete,
+              class: "btn btn-sm btn-outline-danger",
+              form: { data: { turbo_confirm: "Remove this photo?" } } %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>This repair has no photos.</p>
+<% end %>

@@ -16,14 +16,14 @@
 <h2>Repairs</h2>
 
 <% if @bike.repairs.any? %>
-  <ul class="list-group mb-3">
-    <% @bike.repairs.each do |repair| %>
-      <li class="list-group-item">
-        <%= link_to repair.status.titleize, repair_path(repair) %>
-        — promised on <%= repair.promised_on ? l(repair.promised_on, format: :long) : "not scheduled" %>
-      </li>
-    <% end %>
-  </ul>
+  <table class="table table-striped">
+    <thead>
+      <tr><th>Photo</th><th>Status</th><th>Bike</th><th>Customer</th><th>Promised on</th></tr>
+    </thead>
+    <tbody>
+      <%= render partial: "repairs/repair", collection: @bike.repairs %>
+    </tbody>
+  </table>
 <% else %>
   <p>This bike has never been in for a repair.</p>
 <% end %>

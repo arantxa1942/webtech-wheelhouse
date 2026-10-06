@@ -60,9 +60,9 @@ class RepairsController < ApplicationController
 
   def repair_params
     params.expect(repair: [
-      :bike_id, :staff_member_id, :status, :received_at, :quoted_at,
-      :promised_on, :returned_at, :customer_response, :customer_responded_at,
-      repair_services_attributes: [[:id, :service_id, :charged_price, :_destroy]]
+  :bike_id, :staff_member_id, :status, :received_at, :quoted_at,
+  :promised_on, :returned_at, :customer_response, :customer_responded_at,
+  intake_photos: [], repair_services_attributes: [[:id, :service_id, :charged_price, :_destroy]]
     ])
   end
 end

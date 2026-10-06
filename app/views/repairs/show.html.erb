@@ -22,6 +22,12 @@
   <dd class="col-sm-9"><%= @repair.returned_at ? l(@repair.returned_at, format: :long) : "Not returned yet" %></dd>
 </dl>
 
+<h2>Intake photos</h2>
+<%= render "photos", repair: @repair %>
+
+<h2>Intake photos</h2>
+<%= render "photos", repair: @repair %>
+
 <h2>Services charged</h2>
 
 <% if @lines.any? %>

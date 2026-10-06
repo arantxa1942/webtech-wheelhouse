@@ -64,6 +64,14 @@
     <%= field_error(repair, :customer_responded_at) %>
   </div>
 
+  <div class="mb-3">
+  <%= f.label :intake_photos, "Intake photos", class: "form-label" %>
+  <%= f.file_field :intake_photos, multiple: true, include_hidden: false,
+        accept: "image/jpeg,image/png,image/webp,image/heic",
+        class: field_class(repair, :intake_photos) %>
+  <%= field_error(repair, :intake_photos) %>
+  </div>
+
   <h2 class="h5 mt-4">Services</h2>
   <p class="text-muted">Leave the service blank on a line to ignore it.</p>
 

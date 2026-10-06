@@ -5,6 +5,14 @@ class Repair < ApplicationRecord
   accepts_nested_attributes_for :repair_services, allow_destroy: true, reject_if: ->(attrs) { attrs["service_id"].blank? }
   has_many :services, through: :repair_services
 
+  THUMB_SIZE = [120, 90].freeze
+  PAGE_SIZE  = [800, 600].freeze
+
+  has_many_attached :intake_photos do |attachable|
+    attachable.variant :thumb, resize_to_fill: THUMB_SIZE
+    attachable.variant :page,  resize_to_limit: PAGE_SIZE
+  end
+
   enum :status, {
     received: "received", quoted: "quoted", approved: "approved",
     declined: "declined", in_progress: "in_progress",
@@ -27,6 +35,10 @@ class Repair < ApplicationRecord
 
   def total
     repair_services.sum(:charged_price)
+  end
+
+  def photo_alt
+    "#{bike.make} #{bike.model}, repair ##{id}"
   end
 
   private

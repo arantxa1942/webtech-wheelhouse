@@ -22,4 +22,6 @@ Rails.application.routes.draw do
   resources :repairs
   resources :services
   resources :staff_members
+  resources :repairs do
+  resources :intake_photos, only: :destroy
 end
