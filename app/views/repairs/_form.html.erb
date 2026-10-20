@@ -67,9 +67,15 @@
   <div class="mb-3">
   <%= f.label :intake_photos, "Intake photos", class: "form-label" %>
   <%= f.file_field :intake_photos, multiple: true, include_hidden: false,
-        accept: "image/jpeg,image/png,image/webp,image/heic",
+        accept:"image/jpeg,image/png,image/webp",,
         class: field_class(repair, :intake_photos) %>
   <%= field_error(repair, :intake_photos) %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :diagnosis, "Diagnosis", class: "form-label" %>
+    <%= f.rich_text_area :diagnosis, class: field_class(repair, :diagnosis) %>
+    <%= field_error(repair, :diagnosis) %>
   </div>
 
   <h2 class="h5 mt-4">Services</h2>

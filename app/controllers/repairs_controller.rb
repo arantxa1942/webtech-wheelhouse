@@ -19,8 +19,10 @@ class RepairsController < ApplicationController
   end
 
   def create
-    @repair = Repair.new(repair_params)
-    if @repair.save
+    @repair = Repair.new(repair_params.except(:intake_photos))
+    @repair.new_photos = repair_params[:intake_photos]
+
+    if save_with_photos
       redirect_to @repair, notice: "Repair ##{@repair.id} was created."
     else
       build_blank_lines(3)
@@ -29,21 +31,14 @@ class RepairsController < ApplicationController
   end
 
   def update
-    if @repair.update(repair_params)
+    @repair.assign_attributes(repair_params.except(:intake_photos))
+    @repair.new_photos = repair_params[:intake_photos]
+
+    if save_with_photos
       redirect_to @repair, notice: "Repair ##{@repair.id} was updated."
     else
       build_blank_lines(2)
       render :edit, status: :unprocessable_content
-    end
-  end
-
-  def destroy
-    if @repair.destroy
-      redirect_to repairs_path, status: :see_other,
-                  notice: "Repair ##{@repair.id} was deleted."
-    else
-      redirect_to @repair, status: :see_other,
-                  alert: @repair.errors.full_messages.to_sentence
     end
   end
 
@@ -52,17 +47,23 @@ class RepairsController < ApplicationController
   def set_repair
     @repair = Repair.find(params[:id])
   end
+  def save_with_photos
+    return false unless @repair.save
+
+    @repair.intake_photos.attach(@repair.new_photos) if @repair.new_photos.any?
+    true
+  end
 
   def build_blank_lines(count)
     unsaved = @repair.repair_services.select(&:new_record?).size
     (count - unsaved).times { @repair.repair_services.build }
   end
 
-  def repair_params
+   def repair_params
     params.expect(repair: [
-  :bike_id, :staff_member_id, :status, :received_at, :quoted_at,
-  :promised_on, :returned_at, :customer_response, :customer_responded_at,
-  intake_photos: [], repair_services_attributes: [[:id, :service_id, :charged_price, :_destroy]]
+      :bike_id, :staff_member_id, :status, :received_at, :quoted_at,
+      :promised_on, :returned_at, :customer_response, :customer_responded_at,
+      :diagnosis,
+      intake_photos: [], repair_services_attributes: [[:id, :service_id, :charged_price, :_destroy]]
     ])
   end
-end

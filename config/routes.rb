@@ -17,11 +17,13 @@ Rails.application.routes.draw do
   get "visit", to: "pages#visit", as: :visit
   get "about", to: "pages#about", as: :about
 
-  resources :customers
+    resources :customers
   resources :bikes
-  resources :repairs
   resources :services
   resources :staff_members
+
   resources :repairs do
-  resources :intake_photos, only: :destroy
-end
+    resources :intake_photos, only: :destroy
+  end
+  namespace :api
+end 

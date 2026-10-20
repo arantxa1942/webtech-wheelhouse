@@ -5,14 +5,16 @@
 <% if @repairs.any? %>
   <table class="table table-striped">
     <th>Photo</th>
-    <thead>
-      <tr>
-        <th>Status</th>
-        <th>Bike</th>
-        <th>Customer</th>
-        <th>Promised on</th>
-      </tr>
-    </thead>
+      <thead>
+        <tr>
+          <th>Photo</th>
+          <th>Status</th>
+          <th>Bike</th>
+          <th>Customer</th>
+          <th>Promised on</th>
+          <th>Diagnosis</th>
+        </tr>
+      </thead>
     <tbody>
       <%= render partial: "repair", collection: @repairs %>
     </tbody>

@@ -21,4 +21,7 @@
       <span class="badge bg-danger">Overdue</span>
     <% end %>
   </td>
+  <td class="text-nowrap">
+    <%= repair.diagnosis.to_plain_text.squish.truncate(50) %>
+  </td>
 </tr>

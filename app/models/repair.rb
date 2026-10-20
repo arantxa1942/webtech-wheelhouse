@@ -13,6 +13,21 @@ class Repair < ApplicationRecord
     attachable.variant :page,  resize_to_limit: PAGE_SIZE
   end
 
+  has_rich_text :diagnosis
+  PHOTO_TYPES = {
+    "image/jpeg" => "JPEG",
+    "image/png"  => "PNG",
+    "image/webp" => "WebP"
+  }.freeze
+  MAX_PHOTO_SIZE = 5.megabytes
+
+  
+  attr_writer :new_photos
+
+  def new_photos
+    Array(@new_photos).select { |f| f.respond_to?(:original_filename) }
+  end
+
   enum :status, {
     received: "received", quoted: "quoted", approved: "approved",
     declined: "declined", in_progress: "in_progress",
@@ -21,6 +36,7 @@ class Repair < ApplicationRecord
 
   validates :status, presence: true
   validates :received_at, presence: true
+  validate :new_photos_are_acceptable
 
   validate :dates_are_consistent
   validate :lifecycle_is_consistent
@@ -51,6 +67,22 @@ class Repair < ApplicationRecord
     end
     if promised_on.present? && promised_on < received_at.to_date
       errors.add(:promised_on, "can't be before the day the bike was received")
+    end
+  end
+  
+  def new_photos_are_acceptable
+    new_photos.each do |file|
+      unless PHOTO_TYPES.key?(file.content_type)
+        errors.add(:intake_photos,
+          "\"#{file.original_filename}\" is not an accepted image type " \
+          "(use #{PHOTO_TYPES.values.to_sentence(two_words_connector: ' or ', last_word_connector: ', or ')})")
+      end
+
+      if file.size > MAX_PHOTO_SIZE
+        errors.add(:intake_photos,
+          "\"#{file.original_filename}\" is #{ActiveSupport::NumberHelper.number_to_human_size(file.size)}; " \
+          "the limit is #{ActiveSupport::NumberHelper.number_to_human_size(MAX_PHOTO_SIZE)} per photo")
+      end
     end
   end
 

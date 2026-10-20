@@ -25,8 +25,12 @@
 <h2>Intake photos</h2>
 <%= render "photos", repair: @repair %>
 
-<h2>Intake photos</h2>
-<%= render "photos", repair: @repair %>
+<h2>Diagnosis</h2>
+<% if @repair.diagnosis.present? %>
+  <div class="mb-4"><%= @repair.diagnosis %></div>
+<% else %>
+  <p>This repair has no diagnosis yet.</p>
+<% end %>
 
 <h2>Services charged</h2>
 
