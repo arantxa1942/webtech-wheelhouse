@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get "visit", to: "pages#visit", as: :visit
   get "about", to: "pages#about", as: :about
 
-    resources :customers
+  resources :customers
   resources :bikes
   resources :services
   resources :staff_members
@@ -25,5 +25,14 @@ Rails.application.routes.draw do
   resources :repairs do
     resources :intake_photos, only: :destroy
   end
-  namespace :api
-end 
+
+  namespace :api do
+    namespace :v1 do
+      resources :services, only: %i[index show create]
+      resources :repairs,  only: %i[index show]
+    end
+
+    
+    match "*unmatched", to: "base#route_not_found", via: :all
+  end
+end

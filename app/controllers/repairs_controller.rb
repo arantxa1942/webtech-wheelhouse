@@ -42,11 +42,23 @@ class RepairsController < ApplicationController
     end
   end
 
+  def destroy
+    if @repair.destroy
+      redirect_to repairs_path, status: :see_other,
+                  notice: "Repair ##{@repair.id} was deleted."
+    else
+      redirect_to @repair, status: :see_other,
+                  alert: @repair.errors.full_messages.to_sentence
+    end
+  end
+
   private
 
   def set_repair
     @repair = Repair.find(params[:id])
   end
+
+  # Validates everything first; the files are attached only if the save succeeded.
   def save_with_photos
     return false unless @repair.save
 
@@ -59,11 +71,12 @@ class RepairsController < ApplicationController
     (count - unsaved).times { @repair.repair_services.build }
   end
 
-   def repair_params
+  def repair_params
     params.expect(repair: [
       :bike_id, :staff_member_id, :status, :received_at, :quoted_at,
-      :promised_on, :returned_at, :customer_response, :customer_responded_at,
+      :promised_at, :returned_at, :customer_response, :customer_responded_at,
       :diagnosis,
       intake_photos: [], repair_services_attributes: [[:id, :service_id, :charged_price, :_destroy]]
     ])
   end
+end
