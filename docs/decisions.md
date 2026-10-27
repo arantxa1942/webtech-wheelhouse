@@ -51,3 +51,38 @@ to be checked regularly (for example, a mechanic confirming there is no new
 damage before starting work), the wireframes would need a dedicated step or
 screen for reviewing photos as part of the repair workflow, not just an
 optional detail buried in the repair's page.
+
+## Which role should a new account have by default?
+
+The owner said that nothing but the wall list is public, and that the people
+of the workshop sign in. An account has one of three roles: owner, mechanic
+or counter. The description does not list what each role is allowed to do, so
+the default has to be decided from what each person does in the workshop.
+
+**Solution:** the default role is `counter`.
+
+- Counter staff record customers and bikes at arrival, check for updates and
+  hand the bike back when it is ready. Nothing in that description involves
+  repairing a bike or running the shop.
+- Mechanics repair bikes and keep a record of the services performed, which is
+  more than the counter does.
+- The owner makes sure everything is working accordingly, which covers the
+  whole workshop, so the owner has the most permissions.
+
+The default role is the one an account receives when nobody has chosen a role
+for it, for example a person who signs up on the sign-up page. Nobody has
+vouched for that person, so they should receive the fewest permissions. If
+the default were wrong, it should give too little access, not too much. The
+role cannot be chosen on the sign-up page; it is changed from the seed or the
+console.
+
+**Assumption:** the description does not talk about permissions, so I read
+them from what each person does: the counter's work is a subset of the
+mechanic's, and the mechanic's is a subset of the owner's.
+
+**What would change if the answer is the other way:** if the default were
+`mechanic` or `owner`, anyone who signs up would start with the power to work
+on repairs or to manage the workshop. Choosing another default would mean
+changing the `default` of the `role` column in the migration and the default of
+the enum in `User`, and it would give every new account that role's access from
+the moment it is created.

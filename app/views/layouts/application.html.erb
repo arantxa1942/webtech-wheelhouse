@@ -24,43 +24,61 @@
   <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-      <%= link_to "Wheelhouse", root_path, class: "navbar-brand" %>
+      <%= link_to "Wheelhouse", (authenticated? ? root_path : services_path), class: "navbar-brand" %>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <%= link_to "Home", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Customers", customers_path, class: "nav-link #{'active' if current_page?(customers_path)}" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Bikes", bikes_path, class: "nav-link #{'active' if current_page?(bikes_path)}" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Repairs", repairs_path, class: "nav-link #{'active' if current_page?(repairs_path)}" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Services", services_path, class: "nav-link #{'active' if current_page?(services_path)}" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Staff", staff_members_path, class: "nav-link #{'active' if current_page?(staff_members_path)}" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Visit", visit_path, class: "nav-link #{'active' if current_page?(visit_path)}" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "About", about_path, class: "nav-link #{'active' if current_page?(about_path)}" %>
-          </li>
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <% if authenticated? %>
+            <li class="nav-item">
+              <%= link_to "Home", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "Customers", customers_path, class: "nav-link #{'active' if current_page?(customers_path)}" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "Bikes", bikes_path, class: "nav-link #{'active' if current_page?(bikes_path)}" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "Repairs", repairs_path, class: "nav-link #{'active' if current_page?(repairs_path)}" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "Services", services_path, class: "nav-link #{'active' if current_page?(services_path)}" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "Staff", staff_members_path, class: "nav-link #{'active' if current_page?(staff_members_path)}" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "Visit", visit_path, class: "nav-link #{'active' if current_page?(visit_path)}" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "About", about_path, class: "nav-link #{'active' if current_page?(about_path)}" %>
+            </li>
+
+            <li class="nav-item ms-lg-3">
+              <span class="navbar-text me-2">
+                <%= Current.user.display_name %> · <%= Current.user.role.humanize %>
+              </span>
+            </li>
+            <li class="nav-item">
+              <%= button_to "Sign out", session_path, method: :delete,
+                    class: "btn btn-outline-secondary btn-sm" %>
+            </li>
+          <% else %>
+            <li class="nav-item">
+              <%= link_to "Price list", services_path, class: "nav-link #{'active' if current_page?(services_path)}" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "Sign in", new_session_path, class: "nav-link #{'active' if current_page?(new_session_path)}" %>
+            </li>
+          <% end %>
         </ul>
       </div>
     </div>
   </nav>
-
   <main class="container mt-4">
     <% flash.each do |kind, message| %>
       <div class="alert <%= kind.to_s == "notice" ? "alert-success" : "alert-danger" %>" role="alert"><%= message %></div>

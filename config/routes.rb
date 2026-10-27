@@ -19,10 +19,14 @@ Rails.application.routes.draw do
   get "visit", to: "pages#visit", as: :visit
   get "about", to: "pages#about", as: :about
 
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+
   resources :customers
   resources :bikes
   resources :services
   resources :staff_members
+  resource :registration, only: %i[new create]
+  resource :registration, only: %i[new create]
 
   resources :repairs do
     resources :intake_photos, only: :destroy
@@ -33,7 +37,7 @@ Rails.application.routes.draw do
       resources :services, only: %i[index show create]
       resources :repairs,  only: %i[index show]
     end
-
+    
     
     match "*unmatched", to: "base#route_not_found", via: :all
   end

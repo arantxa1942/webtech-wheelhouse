@@ -79,4 +79,8 @@ class RepairsController < ApplicationController
       intake_photos: [], repair_services_attributes: [[:id, :service_id, :charged_price, :_destroy]]
     ])
   end
+  def create
+    @repair = Repair.new(repair_params.except(:intake_photos))
+    @repair.taken_in_by = Current.user
+  end
 end

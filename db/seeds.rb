@@ -1,8 +1,9 @@
-
 RepairService.delete_all
 Repair.delete_all
 Bike.delete_all
 Customer.delete_all
+Session.delete_all
+User.delete_all
 StaffMember.delete_all
 Service.delete_all
 
@@ -33,6 +34,40 @@ maria = StaffMember.create!(name: "María González", role: "Mechanic")
 diego = StaffMember.create!(name: "Diego Rojas", role: "Mechanic")
 camila = StaffMember.create!(name: "Camila Soto", role: "Mechanic")
 valentina = StaffMember.create!(name: "Valentina Pérez", role: "Counter staff")
+owner_staff = StaffMember.create!(name: "Ignacio Vargas", role: "Owner")
+
+owner_user = User.create!(
+  email_address: "owner@wheelhouse.test",
+  password: "Owner-Rueda-2026", password_confirmation: "Owner-Rueda-2026",
+  role: :owner, staff_member: owner_staff
+)
+maria_user = User.create!(
+  email_address: "maria@wheelhouse.test",
+  password: "Maria-Cadena-2026", password_confirmation: "Maria-Cadena-2026",
+  role: :mechanic, staff_member: maria
+)
+diego_user = User.create!(
+  email_address: "diego@wheelhouse.test",
+  password: "Diego-Pedal-2026", password_confirmation: "Diego-Pedal-2026",
+  role: :mechanic, staff_member: diego
+)
+camila_user = User.create!(
+  email_address: "camila@wheelhouse.test",
+  password: "Camila-Freno-2026", password_confirmation: "Camila-Freno-2026",
+  role: :mechanic, staff_member: camila
+)
+valentina_user = User.create!(
+  email_address: "valentina@wheelhouse.test",
+  password: "Vale-Mostrador-2026", password_confirmation: "Vale-Mostrador-2026",
+  role: :counter, staff_member: valentina
+)
+
+User.create!(
+  email_address: "visitor@wheelhouse.test",
+  password: "Visitor-Manubrio-2026", password_confirmation: "Visitor-Manubrio-2026"
+)
+
+
 
 ana = Customer.create!(name: "Ana Morales", phone: "+56 9 6123 4501")
 carlos = Customer.create!(name: "Carlos Fuentes", phone: "+56 9 7234 5612")
@@ -149,7 +184,8 @@ repair_1 = Repair.create!(
   bike_id: marlin.id, staff_member_id: maria.id, status: "in_progress",
   received_at: 8.days.ago, quoted_at: 7.days.ago,
   customer_response: "approved", customer_responded_at: 7.days.ago,
-  promised_on: today - 2.days
+  promised_on: today - 2.days,
+  taken_in_by: valentina_user
 )
 
 repair_2 = Repair.create!(
@@ -158,64 +194,74 @@ repair_2 = Repair.create!(
   quoted_at: 12.days.ago.change(hour: 10),
   customer_response: "approved", customer_responded_at: 12.days.ago.change(hour: 11),
   promised_on: today - 12.days,
-  returned_at: 12.days.ago.change(hour: 17)
+  returned_at: 12.days.ago.change(hour: 17),
+  taken_in_by: owner_user
 )
 
 repair_3 = Repair.create!(
   bike_id: rockhopper.id, status: "declined",
   received_at: 6.days.ago, quoted_at: 5.days.ago,
-  customer_response: "declined", customer_responded_at: 5.days.ago
+  customer_response: "declined", customer_responded_at: 5.days.ago,
+  taken_in_by: valentina_user
 )
 
 repair_4 = Repair.create!(
   bike_id: trek_fx_sofia.id, status: "received",
-  received_at: 2.days.ago
+  received_at: 2.days.ago,
+  taken_in_by: owner_user
 )
 
 repair_5 = Repair.create!(
   bike_id: merak.id, staff_member_id: camila.id, status: "quoted",
   received_at: 4.days.ago, quoted_at: 3.days.ago,
-  promised_on: today + 3.days
+  promised_on: today + 3.days,
+  taken_in_by: valentina_user
 )
 
 repair_6 = Repair.create!(
   bike_id: bianchi.id, staff_member_id: maria.id, status: "approved",
   received_at: 5.days.ago, quoted_at: 4.days.ago,
   customer_response: "approved", customer_responded_at: 4.days.ago,
-  promised_on: today + 2.days
+  promised_on: today + 2.days,
+  taken_in_by: owner_user
 )
 
 repair_7 = Repair.create!(
   bike_id: trek_fx_pablo.id, staff_member_id: diego.id, status: "ready_for_pickup",
   received_at: 7.days.ago, quoted_at: 6.days.ago,
   customer_response: "approved", customer_responded_at: 6.days.ago,
-  promised_on: today
+  promised_on: today,
+  taken_in_by: valentina_user
 )
 
 repair_8 = Repair.create!(
   bike_id: quick.id, staff_member_id: camila.id, status: "returned",
   received_at: 20.days.ago, quoted_at: 19.days.ago,
   customer_response: "approved", customer_responded_at: 19.days.ago,
-  promised_on: today - 18.days, returned_at: 18.days.ago
+  promised_on: today - 18.days, returned_at: 18.days.ago,
+  taken_in_by: owner_user
 )
 
 repair_9 = Repair.create!(
   bike_id: scott.id, staff_member_id: maria.id, status: "in_progress",
   received_at: 3.days.ago, quoted_at: 2.days.ago,
   customer_response: "approved", customer_responded_at: 2.days.ago,
-  promised_on: today + 4.days
+  promised_on: today + 4.days,
+  taken_in_by: valentina_user
 )
 
 repair_10 = Repair.create!(
   bike_id: merida.id, staff_member_id: diego.id, status: "ready_for_pickup",
   received_at: 10.days.ago, quoted_at: 9.days.ago,
   customer_response: "approved", customer_responded_at: 9.days.ago,
-  promised_on: today - 1.day
+  promised_on: today - 1.day,
+  taken_in_by: owner_user
 )
 
 repair_11 = Repair.create!(
   bike_id: orbea.id, status: "received",
-  received_at: 1.day.ago
+  received_at: 1.day.ago,
+  taken_in_by: valentina_user
 )
 
 old_received_at = (today.beginning_of_year - 30.days).to_time.change(hour: 9)
@@ -225,7 +271,8 @@ repair_12 = Repair.create!(
   received_at: old_received_at, quoted_at: old_received_at + 1.hour,
   customer_response: "approved", customer_responded_at: old_received_at + 2.hours,
   promised_on: old_received_at.to_date + 2.days,
-  returned_at: old_received_at + 2.days + 6.hours
+  returned_at: old_received_at + 2.days + 6.hours,
+  taken_in_by: owner_user
 )
 
 repair_13 = Repair.create!(

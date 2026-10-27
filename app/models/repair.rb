@@ -1,6 +1,7 @@
 class Repair < ApplicationRecord
   belongs_to :bike
   belongs_to :staff_member, optional: true
+  belongs_to :taken_in_by, class_name: "User", optional: true, inverse_of: :taken_in_repairs
   has_many :repair_services, -> { order(:id) }, dependent: :destroy
   accepts_nested_attributes_for :repair_services, allow_destroy: true, reject_if: ->(attrs) { attrs["service_id"].blank? }
   has_many :services, through: :repair_services
