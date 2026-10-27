@@ -38,19 +38,20 @@ yarn install
 bin/rails db:prepare
 bin/rails db:seed
 ```
+
 `db:seed` can be run again at any time. It rebuilds the same data.
 
 ## Running the app
+
+```bash
+bin/dev
+```
 
 This starts the Rails server and the Sass watcher together. Open
 [http://localhost:3000/services](http://localhost:3000/services) to see the
 price list, which is the only page that does not need an account. Every
 other page asks you to sign in at
 [http://localhost:3000/session/new](http://localhost:3000/session/new).
-
-This starts the Rails server and the Sass watcher together. Open
-[http://localhost:3000/services](http://localhost:3000/services) to see the
-seeded service price list.
 
 ## Database
 

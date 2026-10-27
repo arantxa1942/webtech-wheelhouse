@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   resources :services
   resources :staff_members
   resource :registration, only: %i[new create]
-  resource :registration, only: %i[new create]
+ 
 
   resources :repairs do
     resources :intake_photos, only: :destroy

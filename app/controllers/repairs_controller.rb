@@ -20,6 +20,7 @@ class RepairsController < ApplicationController
 
   def create
     @repair = Repair.new(repair_params.except(:intake_photos))
+    @repair.taken_in_by = Current.user
     @repair.new_photos = repair_params[:intake_photos]
 
     if save_with_photos
@@ -71,16 +72,12 @@ class RepairsController < ApplicationController
     (count - unsaved).times { @repair.repair_services.build }
   end
 
-  def repair_params
+    def repair_params
     params.expect(repair: [
       :bike_id, :staff_member_id, :status, :received_at, :quoted_at,
-      :promised_at, :returned_at, :customer_response, :customer_responded_at,
+      :promised_on, :returned_at, :customer_response, :customer_responded_at,
       :diagnosis,
       intake_photos: [], repair_services_attributes: [[:id, :service_id, :charged_price, :_destroy]]
     ])
   end
-  def create
-    @repair = Repair.new(repair_params.except(:intake_photos))
-    @repair.taken_in_by = Current.user
-  end
-end
+ 
