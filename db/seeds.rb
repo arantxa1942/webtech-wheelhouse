@@ -1,3 +1,7 @@
+ActionText::RichText.delete_all
+ActiveStorage::VariantRecord.delete_all
+ActiveStorage::Attachment.delete_all
+ActiveStorage::Blob.delete_all
 RepairService.delete_all
 Repair.delete_all
 Bike.delete_all
@@ -292,6 +296,13 @@ repair_15 = Repair.create!(
   bike_id: quick.id, status: "declined",
   received_at: 16.days.ago, quoted_at: 15.days.ago,
   customer_response: "declined", customer_responded_at: 15.days.ago
+)
+repair_16 = Repair.create!(
+  bike_id: merak.id, staff_member_id: maria.id, status: "returned",
+  received_at: 25.days.ago.change(hour: 9), quoted_at: 25.days.ago.change(hour: 10),
+  customer_response: "approved", customer_responded_at: 25.days.ago.change(hour: 11),
+  promised_on: today - 23.days, returned_at: 23.days.ago.change(hour: 17),
+  taken_in_by: owner_user
 )
 
 brake_adjustment = Service.find_by!(name: "Brake or gear adjustment")
