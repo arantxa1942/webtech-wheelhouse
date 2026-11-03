@@ -72,14 +72,15 @@ bin/rails db:seed
 The seed creates these accounts. **They exist only in development** and must
 never be used anywhere else.
 
-| Email | Password | Role | Staff member |
-|---|---|---|---|
-| owner@wheelhouse.test | Owner-Rueda-2026 | owner | Ignacio Vargas |
-| maria@wheelhouse.test | Maria-Cadena-2026 | mechanic | María González |
-| diego@wheelhouse.test | Diego-Pedal-2026 | mechanic | Diego Rojas |
-| camila@wheelhouse.test | Camila-Freno-2026 | mechanic | Camila Soto |
-| valentina@wheelhouse.test | Vale-Mostrador-2026 | counter | Valentina Pérez |
-| visitor@wheelhouse.test | Visitor-Manubrio-2026 | counter (default) | none |
+
+| Email | Password | Role | Staff member | What it can do |
+|---|---|---|---|---|
+| owner@wheelhouse.test | Owner-Rueda-2026 | owner | Ignacio Vargas | Everything, including price list, staff and deleting. |
+| maria@… / diego@… / camila@… | (las de tu tabla) | mechanic | … | Reads their own repairs; changes only state, diagnosis and photos. No customers or bikes. |
+| valentina@wheelhouse.test | Vale-Mostrador-2026 | counter | Valentina Pérez | Takes in repairs; creates/edits customers and bikes; edits repairs not handed back; no deleting. |
+| visitor@wheelhouse.test | Visitor-Manubrio-2026 | counter (default) | none | Same as counter. |
+
+Full rules: [docs/permissions.md](docs/permissions.md).
 
 Anyone can also create an account at
 [http://localhost:3000/registration/new](http://localhost:3000/registration/new).

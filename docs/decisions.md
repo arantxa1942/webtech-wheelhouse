@@ -86,3 +86,19 @@ on repairs or to manage the workshop. Choosing another default would mean
 changing the `default` of the `role` column in the migration and the default of
 the enum in `User`, and it would give every new account that role's access from
 the moment it is created.
+
+## Which actions are public (no policy call)?
+
+Pundit checks run in `ApplicationController` (`verify_authorized` / `verify_policy_scoped`),
+so every controller is covered by default. These actions opt out with
+`skip_after_action :verify_authorized`, because they act on no resource:
+
+| Controller#action | Why it is public |
+|---|---|
+| `pages#home`, `pages#visit`, `pages#about` | Static pages, no record. |
+| `sessions#new/create/destroy` | Sign in / out. Needed before there is an account. |
+| `registrations#new/create` | Sign up. The role is never a field; it takes the default. |
+| `passwords#new/create/edit/update` | Forgotten password; the visitor has no session. |
+
+`/api/v1/*` inherits from `Api::BaseController`, not `ApplicationController`. It
+is protected by its token and does not change. `GET /up` is Rails' health check.
