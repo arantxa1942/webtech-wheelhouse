@@ -3,14 +3,18 @@ class ServicesController < ApplicationController
   before_action :set_service, only: %i[show edit update destroy]
 
   def index
-    @services = Service.order(:name)
+    authorize Service
+    @services = policy_scope(Service).order(:name)
   end
 
   def show
-    @lines = @service.repair_services.includes(:repair)
+    @lines = @service.repair_services
+                    .where(repair_id: policy_scope(Repair).select(:id))
+                    .includes(:repair)
   end
   def new
-    @service = Service.new
+      @service = service.new(customer_id: params[:customer_id])
+      authorize @service
   end
 
   def edit
@@ -18,6 +22,7 @@ class ServicesController < ApplicationController
 
   def create
     @service = Service.new(service_params)
+    authorize @service
     if @service.save
       redirect_to @service, notice: "Service #{@service.name} was created."
     else
@@ -47,6 +52,7 @@ class ServicesController < ApplicationController
 
   def set_service
     @service = Service.find(params[:id])
+    authorize @service
   end
 
   def service_params

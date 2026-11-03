@@ -1,8 +1,8 @@
 class IntakePhotosController < ApplicationController
   def destroy
     repair = Repair.find(params[:repair_id])
+    authorize repair, :destroy_photo?
     repair.intake_photos_attachments.find(params[:id]).purge
-    redirect_back_or_to repair_path(repair), status: :see_other,
-                        notice: "Photo was removed."
+    redirect_back_or_to repair_path(repair), status: :see_other, notice: "Photo was removed."
   end
 end

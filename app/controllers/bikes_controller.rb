@@ -1,15 +1,17 @@
 class BikesController < ApplicationController
   before_action :set_bike, only: %i[show edit update destroy]
   def index
-    @bikes = Bike.includes(:customer).order(:make, :model)
+    authorize Bike
+    @bikes = policy_scope(Bike).includes(:customer).order(:make, :model)
   end
 
   def show
-    
+    @repairs = policy_scope(@bike.repairs).for_list
   end
+ 
   def new
-    
     @bike = Bike.new(customer_id: params[:customer_id])
+    authorize @bike
   end
 
   def edit
@@ -17,6 +19,7 @@ class BikesController < ApplicationController
 
   def create
     @bike = Bike.new(bike_params)
+    authorize @bike
     if @bike.save
       redirect_to @bike, notice: "Bike #{@bike.serial_number} was created."
     else
@@ -46,6 +49,7 @@ class BikesController < ApplicationController
 
   def set_bike
     @bike = Bike.find(params[:id])
+    authorize @bike
   end
 
   def bike_params

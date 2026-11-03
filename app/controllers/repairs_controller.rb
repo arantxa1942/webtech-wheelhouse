@@ -2,7 +2,10 @@ class RepairsController < ApplicationController
   before_action :set_repair, only: %i[show edit update destroy]
 
   def index
-    @repairs = Repair.includes(bike: :customer).order(received_at: :desc)
+    authorize Repair
+    @repairs = policy_scope(Repair).for_list.newest_first
+    @repairs = @repairs.where(status: params[:status]) if Repair.statuses.key?(params[:status].to_s)
+    @repairs = @repairs.overdue if params[:overdue].present?
   end
 
   def show
@@ -11,6 +14,7 @@ class RepairsController < ApplicationController
 
   def new
     @repair = Repair.new(bike_id: params[:bike_id], received_at: Time.current)
+    authorize @repair
     build_blank_lines(3)
   end
 
@@ -20,7 +24,8 @@ class RepairsController < ApplicationController
 
   def create
     @repair = Repair.new(repair_params.except(:intake_photos))
-    @repair.taken_in_by = Current.user
+    authorize @repair
+    @repair.taken_in_by = Current.user   
     @repair.new_photos = repair_params[:intake_photos]
 
     if save_with_photos
@@ -45,11 +50,9 @@ class RepairsController < ApplicationController
 
   def destroy
     if @repair.destroy
-      redirect_to repairs_path, status: :see_other,
-                  notice: "Repair ##{@repair.id} was deleted."
+      redirect_to repairs_path, status: :see_other, notice: "Repair ##{@repair.id} was deleted."
     else
-      redirect_to @repair, status: :see_other,
-                  alert: @repair.errors.full_messages.to_sentence
+      redirect_to @repair, status: :see_other, alert: @repair.errors.full_messages.to_sentence
     end
   end
 
@@ -57,9 +60,13 @@ class RepairsController < ApplicationController
 
   def set_repair
     @repair = Repair.find(params[:id])
+    authorize @repair   
   end
 
-  # Validates everything first; the files are attached only if the save succeeded.
+  def repair_params
+    permitted_attributes(@repair || Repair)
+  end
+
   def save_with_photos
     return false unless @repair.save
 
@@ -71,13 +78,5 @@ class RepairsController < ApplicationController
     unsaved = @repair.repair_services.select(&:new_record?).size
     (count - unsaved).times { @repair.repair_services.build }
   end
-
-    def repair_params
-    params.expect(repair: [
-      :bike_id, :staff_member_id, :status, :received_at, :quoted_at,
-      :promised_on, :returned_at, :customer_response, :customer_responded_at,
-      :diagnosis,
-      intake_photos: [], repair_services_attributes: [[:id, :service_id, :charged_price, :_destroy]]
-    ])
-  end
+end
  
