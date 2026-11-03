@@ -5,9 +5,11 @@
         <%= link_to url_for(photo) do %>
           <%= image_tag photo.variant(:page), alt: repair.photo_alt, class: "img-fluid rounded mb-2" %>
         <% end %>
-        <%= button_to "Remove", repair_intake_photo_path(repair, photo), method: :delete,
-              class: "btn btn-sm btn-outline-danger",
-              form: { data: { turbo_confirm: "Remove this photo?" } } %>
+        <% if policy(repair).destroy_photo? %>
+          <%= button_to "Remove", repair_intake_photo_path(repair, photo), method: :delete,
+                class: "btn btn-sm btn-outline-danger",
+                form: { data: { turbo_confirm: "Remove this photo?" } } %>
+        <% end %>
       </div>
     <% end %>
   </div>

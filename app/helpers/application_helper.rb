@@ -9,6 +9,12 @@ module ApplicationHelper
     messages = field_errors(record, *attributes)
     tag.div(messages.to_sentence, class: "invalid-feedback") if messages.any?
   end
+  
+  def writable?(record, attribute)
+    policy(record).permitted_attributes.any? do |entry|
+      entry.is_a?(Hash) ? entry.key?(attribute) : entry == attribute
+  end
+end
 
   private
 

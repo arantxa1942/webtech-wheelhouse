@@ -1,20 +1,31 @@
 <% content_for :title, "Repairs" %>
 
 <h1>Repairs</h1>
-<%= link_to "New repair", new_repair_path, class: "btn btn-primary mb-3" %>
+
+<% if policy(Repair).create? %>
+  <%= link_to "New repair", new_repair_path, class: "btn btn-primary mb-3" %>
+<% end %>
+
+<nav class="mb-3" aria-label="Filter repairs">
+  <%= link_to "All", repairs_path %> ·
+  <%= link_to "Overdue", repairs_path(overdue: 1) %> ·
+  <% Repair.statuses.each_key do |s| %>
+    <%= link_to s.titleize, repairs_path(status: s) %>
+  <% end %>
+</nav>
+
 <% if @repairs.any? %>
   <table class="table table-striped">
-    <th>Photo</th>
-      <thead>
-        <tr>
-          <th>Photo</th>
-          <th>Status</th>
-          <th>Bike</th>
-          <th>Customer</th>
-          <th>Promised on</th>
-          <th>Diagnosis</th>
-        </tr>
-      </thead>
+    <thead>
+      <tr>
+        <th>Photo</th>
+        <th>Status</th>
+        <th>Bike</th>
+        <th>Customer</th>
+        <th>Promised on</th>
+        <th>Diagnosis</th>
+      </tr>
+    </thead>
     <tbody>
       <%= render partial: "repair", collection: @repairs %>
     </tbody>

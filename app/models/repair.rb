@@ -45,6 +45,7 @@ class Repair < ApplicationRecord
   scope :open, -> { where(returned_at: nil) }
   scope :overdue, -> { open.where("promised_on < ?", Date.current) }
   scope :newest_first, -> { order(received_at: :desc) }
+  scope :for_list, -> { includes(bike: :customer).with_attached_intake_photos.with_rich_text_diagnosis }
 
   def overdue?
     returned_at.nil? && promised_on.present? && promised_on.past?

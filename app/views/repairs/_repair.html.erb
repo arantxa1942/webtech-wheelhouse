@@ -1,4 +1,6 @@
 <% overdue = repair.promised_on.present? && repair.promised_on.past? && repair.returned_at.nil? %>
+<% bike = repair.bike %>
+<% customer = bike.customer %>
 
 <tr class="<%= "table-danger" if overdue %>">
   <td class="align-middle">
@@ -13,8 +15,20 @@
     <% end %>
   </td>
   <td><%= link_to repair.status.titleize, repair_path(repair) %></td>
-  <td><%= link_to repair.bike.make, bike_path(repair.bike) %></td>
-  <td><%= link_to repair.bike.customer.name, customer_path(repair.bike.customer) %></td>
+  <td>
+    <% if policy(bike).show? %>
+      <%= link_to bike.make, bike_path(bike) %>
+    <% else %>
+      <%= bike.make %>
+    <% end %>
+  </td>
+  <td>
+    <% if policy(customer).show? %>
+      <%= link_to customer.name, customer_path(customer) %>
+    <% else %>
+      <%= customer.name %>
+    <% end %>
+  </td>
   <td>
     <%= repair.promised_on ? l(repair.promised_on, format: :long) : "not scheduled" %>
     <% if overdue %>

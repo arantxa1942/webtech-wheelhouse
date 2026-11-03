@@ -10,18 +10,24 @@
   <dd class="col-sm-9"><%= @bike.serial_number %></dd>
 
   <dt class="col-sm-3">Owner</dt>
-  <dd class="col-sm-9"><%= link_to @bike.customer.name, customer_path(@bike.customer) %></dd>
+  <dd class="col-sm-9">
+    <% if policy(@bike.customer).show? %>
+      <%= link_to @bike.customer.name, customer_path(@bike.customer) %>
+    <% else %>
+      <%= @bike.customer.name %>
+    <% end %>
+  </dd>
 </dl>
 
 <h2>Repairs</h2>
 
-<% if @bike.repairs.any? %>
+<% if @repairs.any? %>
   <table class="table table-striped">
     <thead>
-        <tr><th>Photo</th><th>Status</th><th>Bike</th><th>Customer</th><th>Promised on</th><th>Diagnosis</th></tr>
+      <tr><th>Photo</th><th>Status</th><th>Bike</th><th>Customer</th><th>Promised on</th><th>Diagnosis</th></tr>
     </thead>
     <tbody>
-      <%= render partial: "repairs/repair", collection: @bike.repairs %>
+      <%= render partial: "repairs/repair", collection: @repairs %>
     </tbody>
   </table>
 <% else %>
@@ -30,8 +36,12 @@
 
 <div class="d-flex gap-2 mt-2">
   <%= link_to "← Back to bikes", bikes_path, class: "btn btn-outline-secondary" %>
-  <%= link_to "Edit", edit_bike_path(@bike), class: "btn btn-outline-primary" %>
-  <%= button_to "Delete", @bike, method: :delete,
-        class: "btn btn-outline-danger",
-        form: { data: { turbo_confirm: "Delete bike #{@bike.serial_number}?" } } %>
+  <% if policy(@bike).edit? %>
+    <%= link_to "Edit", edit_bike_path(@bike), class: "btn btn-outline-primary" %>
+  <% end %>
+  <% if policy(@bike).destroy? %>
+    <%= button_to "Delete", @bike, method: :delete,
+          class: "btn btn-outline-danger",
+          form: { data: { turbo_confirm: "Delete bike #{@bike.serial_number}?" } } %>
+  <% end %>
 </div>

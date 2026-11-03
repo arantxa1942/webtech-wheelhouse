@@ -1,5 +1,8 @@
 <% content_for :title, "Repair ##{@repair.id}" %>
 
+<% bike = @repair.bike %>
+<% customer = bike.customer %>
+
 <h1>Repair #<%= @repair.id %></h1>
 
 <dl class="row">
@@ -7,10 +10,22 @@
   <dd class="col-sm-9"><%= @repair.status.titleize %></dd>
 
   <dt class="col-sm-3">Bike</dt>
-  <dd class="col-sm-9"><%= link_to @repair.bike.make, bike_path(@repair.bike) %></dd>
+  <dd class="col-sm-9">
+    <% if policy(bike).show? %>
+      <%= link_to bike.make, bike_path(bike) %>
+    <% else %>
+      <%= bike.make %>
+    <% end %>
+  </dd>
 
   <dt class="col-sm-3">Customer</dt>
-  <dd class="col-sm-9"><%= link_to @repair.bike.customer.name, customer_path(@repair.bike.customer) %></dd>
+  <dd class="col-sm-9">
+    <% if policy(customer).show? %>
+      <%= link_to customer.name, customer_path(customer) %>
+    <% else %>
+      <%= customer.name %>
+    <% end %>
+  </dd>
 
   <dt class="col-sm-3">Taken in by</dt>
   <dd class="col-sm-9"><%= @repair.taken_in_by&.display_name || "Unknown" %></dd>
@@ -66,8 +81,12 @@
 
 <div class="d-flex gap-2 mt-2">
   <%= link_to "← Back to repairs", repairs_path, class: "btn btn-outline-secondary" %>
-  <%= link_to "Edit", edit_repair_path(@repair), class: "btn btn-outline-primary" %>
-  <%= button_to "Delete", @repair, method: :delete,
-        class: "btn btn-outline-danger",
-        form: { data: { turbo_confirm: "Delete repair ##{@repair.id}?" } } %>
+  <% if policy(@repair).edit? %>
+    <%= link_to "Edit", edit_repair_path(@repair), class: "btn btn-outline-primary" %>
+  <% end %>
+  <% if policy(@repair).destroy? %>
+    <%= button_to "Delete", @repair, method: :delete,
+          class: "btn btn-outline-danger",
+          form: { data: { turbo_confirm: "Delete repair ##{@repair.id}?" } } %>
+  <% end %>
 </div>

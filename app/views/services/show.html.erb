@@ -7,33 +7,39 @@
   <dd class="col-sm-9"><%= number_to_currency(@service.price) %></dd>
 </dl>
 
-<h2>Charged on these repairs</h2>
+<% if policy(Repair).index? %>
+  <h2>Charged on these repairs</h2>
 
-<% if @lines.any? %>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Repair</th>
-        <th>Price charged</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @lines.each do |line| %>
+  <% if @lines.any? %>
+    <table class="table table-striped">
+      <thead>
         <tr>
-          <td><%= link_to "Repair ##{line.repair.id}", repair_path(line.repair) %></td>
-          <td><%= number_to_currency(line.charged_price) %></td>
+          <th>Repair</th>
+          <th>Price charged</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <p>This service has not been charged on any repair yet.</p>
+      </thead>
+      <tbody>
+        <% @lines.each do |line| %>
+          <tr>
+            <td><%= link_to "Repair ##{line.repair.id}", repair_path(line.repair) %></td>
+            <td><%= number_to_currency(line.charged_price) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>This service has not been charged on any repair yet.</p>
+  <% end %>
 <% end %>
 
 <div class="d-flex gap-2 mt-2">
   <%= link_to "← Back to services", services_path, class: "btn btn-outline-secondary" %>
-  <%= link_to "Edit", edit_service_path(@service), class: "btn btn-outline-primary" %>
-  <%= button_to "Delete", @service, method: :delete,
-        class: "btn btn-outline-danger",
-        form: { data: { turbo_confirm: "Delete service #{@service.name}?" } } %>
+  <% if policy(@service).edit? %>
+    <%= link_to "Edit", edit_service_path(@service), class: "btn btn-outline-primary" %>
+  <% end %>
+  <% if policy(@service).destroy? %>
+    <%= button_to "Delete", @service, method: :delete,
+          class: "btn btn-outline-danger",
+          form: { data: { turbo_confirm: "Delete service #{@service.name}?" } } %>
+  <% end %>
 </div>

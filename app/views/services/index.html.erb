@@ -1,7 +1,9 @@
 <% content_for :title, "Services" %>
 
 <h1>Services</h1>
-<%= link_to "New service", new_service_path, class: "btn btn-primary mb-3" %>
+<% if policy(Service).create? %>
+  <%= link_to "New service", new_service_path, class: "btn btn-primary mb-3" %>
+<% end %>
 <% if @services.any? %>
   <table class="table table-striped">
     <thead>
