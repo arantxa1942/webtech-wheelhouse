@@ -72,3 +72,5 @@ gem "rack-cors", "~> 3.0"
 group :development do
   gem "letter_opener_web", "~> 3.0"
 end
+
+gem "pundit", "~> 2.5"
